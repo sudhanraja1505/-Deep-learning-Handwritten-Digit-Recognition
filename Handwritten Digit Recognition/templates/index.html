@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handwritten Digit Recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">0–9</span> DigitVision</a>
+    <span class="top-tag">DEEP LEARNING · CNN</span>
+  </header>
+  <main class="layout">
+    <section class="hero">
+      <div class="eyebrow"><span class="dot"></span> HANDWRITTEN DIGIT RECOGNITION</div>
+      <h1>Every digit has<br>a <span>story.</span></h1>
+      <p class="lead">Upload an image of a handwritten number and let a Convolutional Neural Network predict the digit from 0 to 9.</p>
+      <div class="digit-strip" aria-label="Digits zero to nine">
+        <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-title"><div><h2>Try a prediction</h2><p>Choose a clear image with one handwritten digit.</p></div><div class="upload-icon">↑</div></div>
+      <form method="POST" enctype="multipart/form-data">
+        <label class="upload-area" for="digit_image">
+          <div class="upload-symbol">＋</div><strong>Upload your digit image</strong>
+          <span id="file-name">PNG, JPG, WEBP or BMP · Max 5 MB</span>
+          <input id="digit_image" type="file" name="digit_image" accept=".png,.jpg,.jpeg,.webp,.bmp" required>
+        </label>
+        <button type="submit">Recognize digit <span>→</span></button>
+      </form>
+      {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+      {% if prediction %}
+      <div class="result">
+        <h2>Prediction complete</h2><img class="preview" src="{{ image_url }}" alt="Uploaded digit">
+        <div class="predicted-digit">{{ prediction.digit }}</div>
+        <p class="confidence">Confidence <strong>{{ "%.2f"|format(prediction.confidence) }}%</strong></p>
+      </div>
+      {% endif %}
+    </section>
+    <section class="how">
+      <div><span class="step">01</span><h3>Upload</h3><p>Select an image containing one handwritten digit.</p></div>
+      <div><span class="step">02</span><h3>Process</h3><p>The image is converted to grayscale and resized.</p></div>
+      <div><span class="step">03</span><h3>Predict</h3><p>The trained CNN predicts a digit from 0 to 9.</p></div>
+    </section>
+    <footer>Built with Python, Flask and TensorFlow · Educational project</footer>
+  </main>
+  <script>
+    const input = document.getElementById("digit_image");
+    const nameLabel = document.getElementById("file-name");
+    input.addEventListener("change", () => {
+      nameLabel.textContent = input.files.length ? input.files[0].name : "PNG, JPG, WEBP or BMP · Max 5 MB";
+    });
+  </script>
+</body>
+</html>
